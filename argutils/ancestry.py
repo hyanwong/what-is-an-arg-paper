@@ -520,6 +520,29 @@ def resolve(tables):
     return out.tree_sequence()
 
 
+def simplify_keeping_unary_in_coal(ts, map_nodes=False):
+    """
+    Keep the unary regions of nodes that are coalescent at least someone in the tree seq
+    Temporary hack until https://github.com/tskit-dev/tskit/issues/2127 is addressed
+    """
+    _, node_map = ts.simplify(map_nodes=True)
+    tables = ts.dump_tables()
+    assert tables.individuals.num_rows == 0
+    # Add an individual for each coalescent node, so we can run
+    # simplify(keep_unary_in_individuals=True) to leave the unary portions in.
+    for c_node in np.where(node_map != tskit.NULL)[0]:
+        i = tables.individuals.add_row()
+        tables.nodes[c_node] = tables.nodes[c_node].replace(individual=i)
+    node_map = tables.simplify(keep_unary_in_individuals=True)
+
+    # Remove all traces of the added individuals
+    tables.individuals.clear()
+    tables.nodes.individual = np.full_like(tables.nodes.individual, tskit.NULL)
+    if map_nodes:
+        return tables.tree_sequence(), node_map
+    else:
+        return tables.tree_sequence()
+
 def wh99_example():
     """
     The example ARG from figure 1 of Wiuf and Hein 99, Recombination as a Point Process
