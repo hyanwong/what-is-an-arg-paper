@@ -10,8 +10,8 @@
 \usepackage{url}
 
 % Uncommment to extract tikz pictures
-% \usetikzlibrary{external}
-% \tikzexternalize
+\usetikzlibrary{external}
+\tikzexternalize
 
 % Packages from msprime 1.0 paper
 % \usepackage{amsmath,amssymb}%
@@ -436,9 +436,9 @@ nodelabel/.style={font=\footnotesize}}
 \draw (r3) |- (r4);
 
 \foreach \u/\lab in {
-        s0/$\noderef{A}$, s1/$\noderef{B}$, s2/$\noderef{B}$,
-        r0/$\noderef{A}$, r1/$\noderef{B}$, r2/$\noderef{B}$,
-        l0/$\noderef{A}$, l1/$\noderef{B}$, l2/$\noderef{B}$}
+        s0/$\noderef{A}$, s1/$\noderef{B}$, s2/$\noderef{C}$,
+        r0/$\noderef{A}$, r1/$\noderef{B}$, r2/$\noderef{C}$,
+        l0/$\noderef{A}$, l1/$\noderef{B}$, l2/$\noderef{C}$}
     \node[nodelabel,anchor=south] at ([yshift=-12pt]\u) {\lab};
 
 \foreach \u/\lab in {
